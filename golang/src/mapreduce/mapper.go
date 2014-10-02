@@ -38,8 +38,10 @@ func mapSingleFileToChannel(inputPath string, outputPath string, channel chan bo
 	channel <- true
 }
 
+var knicksRegexp = regexp.MustCompile("(?i)knicks")
+
 func mapFunc(hood_id string, hood string, borough string, message string) string {
-	if match, err := regexp.MatchString("(?i)knicks", message); err == nil && match {
+	if match := knicksRegexp.MatchString(message); match {
 		return fmt.Sprintf("%s\t%s\n", hood, "1")
 	} else {
 		return fmt.Sprintf("%s\t%s\n", hood, "0")
