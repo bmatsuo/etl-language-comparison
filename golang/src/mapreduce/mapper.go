@@ -42,9 +42,9 @@ var knicksRegexp = regexp.MustCompile("(?i)knicks")
 
 func mapFunc(hood_id string, hood string, borough string, message string) string {
 	if match := knicksRegexp.MatchString(message); match {
-		return fmt.Sprintf("%s\t%s\n", hood, "1")
+		return hood + "\t1\n"
 	} else {
-		return fmt.Sprintf("%s\t%s\n", hood, "0")
+		return hood + "\t0\n"
 	}
 }
 
