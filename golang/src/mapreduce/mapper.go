@@ -84,6 +84,7 @@ func mapSingleFile(inputFile string, outputPath string) {
 		panic(err)
 	}
 	defer destination.Close()
+	w := bufio.NewWriter(destination)
 
 	// Can't use CsvReader because it is unforgiving with single quotes (")
 	scanner := bufio.NewScanner(file)
@@ -93,10 +94,13 @@ func mapSingleFile(inputFile string, outputPath string) {
 
 		hood_id, hood, borough, message := record[0], record[1], record[2], record[3]
 		rval := mapFunc(hood_id, hood, borough, message)
-		destination.WriteString(rval)
+		w.WriteString(rval)
 	}
 
 	if err := scanner.Err(); err != nil {
 		fmt.Fprintln(os.Stderr, "reading standard input:", err)
+	}
+	if err := w.Flush(); err != nil {
+		fmt.Fprintln(os.Stderr, "flushing output:", err)
 	}
 }

@@ -61,12 +61,17 @@ func generateOutput(output string, hash map[string]int) {
 		panic(err)
 	}
 	defer file.Close()
+	w := bufio.NewWriter(file)
 
 	sorted := convertToSortedTuples(hash)
 
 	for _, hoodcount := range sorted {
 		rval := fmt.Sprintf("%s\t%d\n", hoodcount.Hood, hoodcount.Count)
-		file.WriteString(rval)
+		w.WriteString(rval)
+	}
+
+	if err := w.Flush(); err != nil {
+		panic(err)
 	}
 }
 
